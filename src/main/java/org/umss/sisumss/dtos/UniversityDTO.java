@@ -1,12 +1,18 @@
-package org.umss.sisumss;
+package org.umss.sisumss.dtos;
 
-import java.util.UUID;
-
-public class University {
+public class UniversityDTO {
     private Long id;
     private String uuid;
     private String code;
     private String name;
+    public UniversityDTO() {
+    }
+
+    public UniversityDTO(String uuid, String code, String name) {
+        this.uuid = uuid;
+        this.code = code;
+        this.name = name;
+    }
 
     public Long getId() {
         return id;
@@ -20,9 +26,8 @@ public class University {
         this.uuid = uuid;
     }
 
-    public University(String code, String name) {
-        this.code = code;
-        this.name = name;
+    public String getUuid() {
+        return uuid;
     }
 
     public String getCode() {
