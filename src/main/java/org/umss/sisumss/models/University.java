@@ -1,5 +1,7 @@
 package org.umss.sisumss.models;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -38,6 +40,13 @@ public class University {
         this.name = name;
         this.code = code;
         this.createDate = createDate;
+    }
+
+    public University(String uuid) {
+        this.uuid = uuid;
+    }
+    public University(Integer id) {
+        this.id = id;
     }
 
     public Integer getId() {
@@ -95,6 +104,7 @@ public class University {
     public void setFacultyList(List<Faculty> facultyList) {
         this.facultyList = facultyList;
     }
+
 
     @PrePersist
     public void inicializeUuid(){

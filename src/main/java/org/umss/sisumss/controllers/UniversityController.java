@@ -41,13 +41,13 @@ public class UniversityController {
     }
 
     @PutMapping("/{universityUuid}")
-    public UniversityDTO put(@PathVariable String universityUuid, @RequestBody UniversityDTO universityDTO){
-        return new UniversityDTO(universityUuid, "UMSS","Universidad Mayor de San Simon2");
+    public UniversityDTO update(@RequestBody UniversityDTO universityDTO){
+        return universityService.upadteUniversity(universityDTO);
     }
 
     @DeleteMapping("/{universityUuid}")
     public UniversityDTO delete(@PathVariable String universityUuid){
-        return new UniversityDTO(universityUuid, "UMSS","Universidad Mayor de San Simon");
+        return universityService.deleteUniversity(universityUuid);
     }
     @GetMapping("/{universityUuid}/faculties")
     public List<FacultyDTO> getFaculty(@PathVariable String universityUuid){//devuelve lista de facultades de una universidad

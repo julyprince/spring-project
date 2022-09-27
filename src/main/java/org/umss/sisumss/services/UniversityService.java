@@ -72,4 +72,33 @@ public class UniversityService {
                 .map(faculty -> facultyMapper.toDTO(faculty))
                         .collect(Collectors.toList());
     }
+
+    public UniversityDTO upadteUniversity(UniversityDTO universityDTO) {
+        University example1 = new University(universityDTO.getUuid());
+        //example1.setUuid(universityDTO.getUuid());
+        Optional<University> optionalUniversity = universityRepository.findOne(Example.of(example1));
+
+        if (optionalUniversity.isEmpty()){
+            throw  new NotFoundException("University", universityDTO.getUuid());
+        }
+        University university = optionalUniversity.get();
+        university.setCode(universityDTO.getCode());
+        university.setName(universityDTO.getName());
+
+        universityRepository.save(university);
+        return universityMapper.toDTO(university);
+    }
+
+    public UniversityDTO deleteUniversity(String universityUuid) {
+        University example1 = new University(universityUuid);
+        example1.setUuid(universityUuid);
+        Optional<University> optionalUniversity = universityRepository.findOne(Example.of(example1));
+
+        if (optionalUniversity.isEmpty()){
+            throw  new NotFoundException("University", universityUuid);
+        }
+        University university = optionalUniversity.get();
+        universityRepository.delete(university);
+        return universityMapper.toDTO(university);
+    }
 }
