@@ -4,14 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.umss.sisumss.dtos.FacultyDTO;
 import org.umss.sisumss.dtos.UniversityDTO;
 import org.umss.sisumss.services.UniversityService;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/universities")
@@ -31,8 +30,6 @@ public class UniversityController {
     @PostMapping
     public ResponseEntity<UniversityDTO>create(@RequestBody UniversityDTO universitiDTO) throws URISyntaxException {
        UniversityDTO universityDTO = universityService.save(universitiDTO);
-        //return universityService.save(universityDTO);
-        //URI uri = new URI("/universities/" + universityDTO.getUuid());
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{universityUuid}")
@@ -51,5 +48,9 @@ public class UniversityController {
     @DeleteMapping("/{universityUuid}")
     public UniversityDTO delete(@PathVariable String universityUuid){
         return new UniversityDTO(universityUuid, "UMSS","Universidad Mayor de San Simon");
+    }
+    @GetMapping("/{universityUuid}/faculties")
+    public List<FacultyDTO> getFaculty(@PathVariable String universityUuid){//devuelve lista de facultades de una universidad
+        return this.universityService.getFaculties(universityUuid);
     }
 }

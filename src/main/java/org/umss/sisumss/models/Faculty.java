@@ -6,38 +6,37 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 @Entity
-@EntityListeners(AuditingEntityListener.class)//debe actuar con esa auditoria creada
-public class University {
+@EntityListeners(AuditingEntityListener.class)
+public class Faculty { //con relacion uno a muchos univerisdad tiene muchas facultades
+
     @Id
     @GeneratedValue
     private Integer id;
     @Column(updatable = false, nullable = false, unique = true, length = 36)
     private String uuid;
     @Column(updatable = false, length = 500)
-    private String name;
-    @Column(updatable = false, length = 20)
     private String code;
-    @CreatedDate//inyecta la fecha de creacion
+    @Column(updatable = false, length = 20)
+    private String name;
+    @ManyToOne(fetch = FetchType.LAZY)//relacion uno a muchos y con (LAZY) decimos que no popule por defecto
+    private University university;// solo si decimos que cargue va a cargar la universidad (EAGER va ser ciclo infinito entre busqueda universidad y facultad)
+    @CreatedDate//inyecta la fecha de creacion sirve para auditorias
     @Column(updatable = false, nullable = false)
     private Date createDate;
     @LastModifiedDate
     @Column(updatable = true, nullable = false)
     private Date modifyDate;
-    @OneToMany(mappedBy =  "university")//relacion uno muchos recordar poner el campo de la relacion igual que en la otra entidad "university"
-    private List<Faculty>facultyList;
-    public University() {
+    public Faculty() {
     }
 
-    public University(Integer id, String uuid, String name, String code, Date createDate) {
+    public Faculty(Integer id, String uuid, String code, String name) {
         this.id = id;
         this.uuid = uuid;
-        this.name = name;
         this.code = code;
-        this.createDate = createDate;
+        this.name = name;
     }
 
     public Integer getId() {
@@ -48,28 +47,12 @@ public class University {
         this.id = id;
     }
 
-    public Date getModifyDate() {
-        return modifyDate;
-    }
-
-    public void setModifyDate(Date modifyDate) {
-        this.modifyDate = modifyDate;
-    }
-
     public String getUuid() {
         return uuid;
     }
 
     public void setUuid(String uuid) {
         this.uuid = uuid;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getCode() {
@@ -80,6 +63,22 @@ public class University {
         this.code = code;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public University getUniversity() {
+        return university;
+    }
+
+    public void setUniversity(University university) {
+        this.university = university;
+    }
+
     public Date getCreateDate() {
         return createDate;
     }
@@ -88,15 +87,15 @@ public class University {
         this.createDate = createDate;
     }
 
-    public List<Faculty> getFacultyList() {
-        return facultyList;
+    public Date getModifyDate() {
+        return modifyDate;
     }
 
-    public void setFacultyList(List<Faculty> facultyList) {
-        this.facultyList = facultyList;
+    public void setModifyDate(Date modifyDate) {
+        this.modifyDate = modifyDate;
     }
 
-    @PrePersist
+    @PrePersist //para que se autogenere el uuid
     public void inicializeUuid(){
         this.setUuid(UUID.randomUUID().toString());
     }
